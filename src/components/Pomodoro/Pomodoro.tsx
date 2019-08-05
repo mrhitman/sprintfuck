@@ -36,18 +36,10 @@ export class Pomodoro extends Component<{}, PomodoroState> {
           </div>
         </Row>
         <Row>
-          <Button
-            className="pomodoro-button"
-            variant="outline-danger"
-            onClick={this.handleStart}
-          >
+          <Button className="pomodoro-button" variant="outline-danger" onClick={this.handleStart}>
             Start
           </Button>
-          <Button
-            className="pomodoro-button"
-            variant="outline-danger"
-            onClick={this.handleStop}
-          >
+          <Button className="pomodoro-button" variant="outline-danger" onClick={this.handleStop}>
             Stop
           </Button>
         </Row>
