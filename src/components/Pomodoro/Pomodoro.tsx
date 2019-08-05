@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import React, { Component } from "react";
 import { Button, Container, Row } from "react-bootstrap";
-import { FaRegSun } from "react-icons/fa";
+import PomodoroSettings from "./PomodoroSettings";
 
 interface PomodoroState {
   end?: DateTime;
@@ -22,9 +22,7 @@ export class Pomodoro extends Component<{}, PomodoroState> {
     return (
       <Container className="pomodoro-panel">
         <Row className="pomodoro-header">
-          <Button size="sm" variant="outline-light">
-            <FaRegSun />
-          </Button>
+          <PomodoroSettings />
         </Row>
         <Row>
           <div className="pomodoro-time">
@@ -69,6 +67,7 @@ export class Pomodoro extends Component<{}, PomodoroState> {
       return {
         start: undefined,
         timerId: undefined,
+        timeLeft: undefined,
         minutes: state.minutes
       };
     });
