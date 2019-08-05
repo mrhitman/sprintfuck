@@ -9547,6 +9547,11 @@ uglify-js@^3.1.4:
     commander "~2.20.0"
     source-map "~0.6.1"
 
+uifx@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/uifx/-/uifx-1.0.8.tgz#c276f2f76a4a66c67b795f761f067203ee0bcfec"
+  integrity sha512-kVfvaaUrM4mwwf8vt40UtjS5t5VVkbh+qZOYDcJYyT8R8qy+mja9FJ5X4Aap9lXPv3JnOVe2xpCctOR0H5PJ3A==
+
 uncontrollable@^6.0.0:
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/uncontrollable/-/uncontrollable-6.2.3.tgz#e7dba0d746e075122ed178f27ad2354d343196c7"

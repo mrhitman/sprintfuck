@@ -16,7 +16,8 @@
     "react-dom": "^16.8.6",
     "react-icons": "^3.7.0",
     "react-scripts": "3.0.1",
-    "typescript": "3.5.3"
+    "typescript": "3.5.3",
+    "uifx": "^1.0.8"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

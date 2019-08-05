@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon';
 import React, { Component } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
-import PomodoroSettings from './PomodoroSettings';
+import UIFx from 'uifx';
 import PlanList from '../PlanList/PlanList';
+import PomodoroSettings from './PomodoroSettings';
 
 interface PomodoroState {
   end?: DateTime;
@@ -11,12 +12,15 @@ interface PomodoroState {
   minutes: number;
 }
 
+const beep = new UIFx({ asset: 'https://www.soundjay.com/button/beep-01a.mp3' });
+beep.setVolume(0.5);
+
 export class Pomodoro extends Component<{}, PomodoroState> {
   public state = {
-    start: undefined,
+    end: undefined,
     timeLeft: undefined,
     timerId: undefined,
-    minutes: 25
+    minutes: 10
   };
 
   public render() {
@@ -47,25 +51,24 @@ export class Pomodoro extends Component<{}, PomodoroState> {
 
   protected handleStart = () => {
     this.setState((state) => {
+      beep.play();
       const end = DateTime.local().plus({ minutes: state.minutes });
       return {
         end,
         timerId: setInterval(this.handleTimeUpdate, 1000),
-        timeLeft: DateTime.local()
-          .diff(end)
-          .negate()
-          .toFormat('mm : ss')
+        timeLeft: DateTime.local().diff(end).negate().toFormat('mm : ss')
       };
     });
   };
 
   protected handleStop = () => {
     this.setState((state) => {
+      beep.play();
       if (state.timerId) {
         clearInterval(state.timerId);
       }
       return {
-        start: undefined,
+        end: undefined,
         timerId: undefined,
         timeLeft: undefined,
         minutes: state.minutes
@@ -74,13 +77,12 @@ export class Pomodoro extends Component<{}, PomodoroState> {
   };
 
   protected handleTimeUpdate = () => {
-    this.setState((state) => {
-      return {
-        timeLeft: DateTime.local()
-          .diff(state.end!)
-          .negate()
-          .toFormat('mm : ss')
-      };
+    const diff = DateTime.local().diff(this.state.end!);
+    if (+diff >= 0) {
+      return this.handleStop();
+    }
+    this.setState({
+      timeLeft: diff.negate().toFormat('mm : ss')
     });
   };
 }
