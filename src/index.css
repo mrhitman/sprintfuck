@@ -7,7 +7,28 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.pomodoro-panel {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  width: 600px;
+  height: 200px;
+  background-color: lightcoral;
+}
+
+.pomodoro-time {
+  display: flex;
+  align-content: center;
+  font-size: 4.5em;
+}
+
+.pomodoro-header {
+  align-self: flex-start;
+  padding: 4px 0 0 4px;
+}
+
+.pomodoro-button {
+  width: 180px;
+  margin: 10px;
 }
