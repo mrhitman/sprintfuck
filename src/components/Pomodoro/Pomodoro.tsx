@@ -1,11 +1,11 @@
-import { DateTime } from "luxon";
-import React, { Component } from "react";
-import { Button, Container, Row } from "react-bootstrap";
-import { connect } from "react-redux";
-import { Dispatch } from "redux";
-import UIFx from "uifx";
-import PlanList from "../PlanList/PlanList";
-import PomodoroSettings from "./PomodoroSettings";
+import { DateTime } from 'luxon';
+import React, { Component } from 'react';
+import { Button, Container, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
+import UIFx from 'uifx';
+import PlanList from '../PlanList/PlanList';
+import PomodoroSettings from './PomodoroSettings';
 
 interface PomodoroState {
   end?: DateTime;
@@ -15,7 +15,7 @@ interface PomodoroState {
 }
 
 const beep = new UIFx({
-  asset: "https://www.soundjay.com/button/beep-01a.mp3"
+  asset: 'https://www.soundjay.com/button/beep-01a.mp3'
 });
 beep.setVolume(0.5);
 
@@ -36,11 +36,7 @@ export class Pomodoro extends Component<{}, PomodoroState> {
           </Row>
           <Row>
             <div className="pomodoro-time">
-              <div>
-                {this.state.timeLeft
-                  ? this.state.timeLeft
-                  : `${this.state.minutes} : 00`}
-              </div>
+              <div>{this.state.timeLeft ? this.state.timeLeft : `${this.state.minutes} : 00`}</div>
             </div>
           </Row>
           <Row>
@@ -68,22 +64,19 @@ export class Pomodoro extends Component<{}, PomodoroState> {
   }
 
   protected handleStart = () => {
-    this.setState(state => {
+    this.setState((state) => {
       beep.play();
       const end = DateTime.local().plus({ minutes: state.minutes });
       return {
         end,
         timerId: setInterval(this.handleTimeUpdate, 1000),
-        timeLeft: DateTime.local()
-          .diff(end)
-          .negate()
-          .toFormat("mm : ss")
+        timeLeft: DateTime.local().diff(end).negate().toFormat('mm : ss')
       };
     });
   };
 
   protected handleStop = () => {
-    this.setState(state => {
+    this.setState((state) => {
       beep.play();
       if (state.timerId) {
         clearInterval(state.timerId);
@@ -104,14 +97,11 @@ export class Pomodoro extends Component<{}, PomodoroState> {
     }
 
     this.setState({
-      timeLeft: diff.negate().toFormat("mm : ss")
+      timeLeft: diff.negate().toFormat('mm : ss')
     });
   };
 }
 const mapStateToProps = (state: any) => state;
 const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Pomodoro);
+export default connect(mapStateToProps, mapDispatchToProps)(Pomodoro);

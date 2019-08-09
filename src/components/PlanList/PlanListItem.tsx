@@ -14,10 +14,10 @@ export interface PlanItem {
 }
 
 interface PlanListItemProps extends PlanItem {
-  onDelete: () => void;
-  onIncrement: () => void;
-  onDecrement: () => void;
-  onClone: () => void;
+  onDelete: (id: string) => void;
+  onIncrement: (id: string) => void;
+  onDecrement: (id: string) => void;
+  onClone: (id: string) => void;
 }
 
 export class PlanListItem extends Component<PlanListItemProps> {
@@ -29,7 +29,7 @@ export class PlanListItem extends Component<PlanListItemProps> {
           <Col xs={6}>{this.props.description}</Col>
           <Col xs={1}>{this.props.created_at.toFormat('HH:mm')}</Col>
           <Col xs={1}>
-            <Button variant="outline-info" onClick={this.props.onIncrement}>{this.props.amount}</Button>
+            <Button variant="outline-info" onClick={this.handleIncrement}>{this.props.amount}</Button>
           </Col>
           <Col xs={1}>
             <Dropdown>
@@ -37,15 +37,31 @@ export class PlanListItem extends Component<PlanListItemProps> {
                 <FaEllipsisH size="13" />
               </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item onClick={this.props.onIncrement}>Increase</Dropdown.Item>
-              <Dropdown.Item onClick={this.props.onDecrement}>Decrease</Dropdown.Item>
-              <Dropdown.Item onClick={this.props.onDelete}>Delete</Dropdown.Item>
+              <Dropdown.Item onClick={this.handleIncrement}>Increase</Dropdown.Item>
+              <Dropdown.Item onClick={this.handleDecrement}>Decrease</Dropdown.Item>
+              <Dropdown.Item onClick={this.handleDelete}>Delete</Dropdown.Item>
             </Dropdown.Menu>
             </Dropdown>
           </Col>
         </Row>
       </ListGroup.Item>
     );
+  }
+
+  protected handleDelete = () => {
+    this.props.onDelete(this.props.id);
+  }
+
+  protected handleClone = () => {
+    this.props.onClone(this.props.id);
+  }
+
+  protected handleIncrement = () => {
+    this.props.onIncrement(this.props.id);
+  }
+
+  protected handleDecrement = () => {
+    this.props.onDecrement(this.props.id);
   }
 }
 
