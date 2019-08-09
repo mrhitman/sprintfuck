@@ -1,7 +1,7 @@
-import { DateTime } from "luxon";
-import React, { Component } from "react";
-import { Button, Col, Dropdown, ListGroup, Row } from "react-bootstrap";
-import { FaEllipsisH } from "react-icons/fa";
+import {DateTime} from "luxon";
+import React, {Component} from "react";
+import {Button, Col, Dropdown, ListGroup, Row} from "react-bootstrap";
+import {FaEllipsisH} from "react-icons/fa";
 
 export interface PlanItem {
   id: string;
@@ -13,7 +13,12 @@ export interface PlanItem {
   created_at: DateTime;
 }
 
-interface PlanListItemProps extends PlanItem {};
+interface PlanListItemProps extends PlanItem {
+  onDelete: () => void;
+  onIncrement: () => void;
+  onDecrement: () => void;
+  onClone: () => void;
+}
 
 export class PlanListItem extends Component<PlanListItemProps> {
   public render() {
@@ -24,7 +29,7 @@ export class PlanListItem extends Component<PlanListItemProps> {
           <Col xs={6}>{this.props.description}</Col>
           <Col xs={1}>{this.props.created_at.toFormat('HH:mm')}</Col>
           <Col xs={1}>
-            <Button variant="outline-info">{this.props.amount}</Button>
+            <Button variant="outline-info" onClick={this.props.onIncrement}>{this.props.amount}</Button>
           </Col>
           <Col xs={1}>
             <Dropdown>
@@ -32,9 +37,9 @@ export class PlanListItem extends Component<PlanListItemProps> {
                 <FaEllipsisH size="13" />
               </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item>Increase</Dropdown.Item>
-              <Dropdown.Item>Decrease</Dropdown.Item>
-              <Dropdown.Item>Delete</Dropdown.Item>
+              <Dropdown.Item onClick={this.props.onIncrement}>Increase</Dropdown.Item>
+              <Dropdown.Item onClick={this.props.onDecrement}>Decrease</Dropdown.Item>
+              <Dropdown.Item onClick={this.props.onDelete}>Delete</Dropdown.Item>
             </Dropdown.Menu>
             </Dropdown>
           </Col>

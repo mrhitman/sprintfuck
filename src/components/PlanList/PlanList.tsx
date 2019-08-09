@@ -55,9 +55,17 @@ export class PlanList extends Component<{}, PlanListState> {
               <ListGroup variant="flush">
                 {this.state
                   .items
-                    .sort((a, b) => b.order - a.order)
-                  .map((item) => <PlanListItem
-                    key={item.id} {...item} />)}
+                  .sort((a, b) => b.order - a.order)
+                  .map((item) => (
+                    <PlanListItem
+                      key={item.id}
+                      {...item}
+                      onDelete={this.handleDelete(item.id)}
+                      onIncrement={this.handleIncrement(item.id)}
+                      onDecrement={this.handleDecrement(item.id)}
+                      onClone={this.handleClone(item.id)}
+                    />
+                  ))}
               </ListGroup>
             ) : (
               <div>There no any items</div>
@@ -67,6 +75,33 @@ export class PlanList extends Component<{}, PlanListState> {
       </Container>
     );
   }
+
+  protected handleIncrement = (id: string) => () => {
+    this.setState(state => ({
+      items: state.items
+        .map(item => item.id === id ? {...item, amount: item.amount + 1} : item)
+    }));
+  };
+
+  protected handleDecrement = (id: string) => () => {
+    this.setState(state => ({
+      items: state.items
+        .map(item => item.id === id && item.amount > 1 ? {...item, amount: item.amount - 1} : item)
+    }));
+  };
+
+  protected handleClone = (id: string) => () => {
+
+  };
+
+  protected handleDelete = (id: string) => () => {
+    const removedItem = this.state.items.find(item => item.id === id)!;
+    this.setState(state => ({
+      items: state.items
+        .filter(item => item.id !== id)
+        .map(item => item.order > removedItem.order ? {...item, order: item.order - 1} : item)
+    }));
+  };
 
   protected handleEnter = (e: any) => {
     if (e.key === 'Enter') {
@@ -78,7 +113,7 @@ export class PlanList extends Component<{}, PlanListState> {
   };
 
   protected isEqualItem = (a: any, b: any) => {
-      return a.category === b.category && a.description === b.description
+    return a.category === b.category && a.description === b.description
   };
 
   protected addItem = (values: Partial<PlanItem>) => {
