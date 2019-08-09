@@ -55,8 +55,7 @@ export class PlanList extends Component<{}, PlanListState> {
               <ListGroup variant="flush">
                 {this.state
                   .items
-                  .sort()
-                  .reverse()
+                    .sort((a, b) => b.order - a.order)
                   .map((item) => <PlanListItem
                     key={item.id} {...item} />)}
               </ListGroup>
@@ -76,7 +75,7 @@ export class PlanList extends Component<{}, PlanListState> {
         description: this.descriptionRef.current.value
       });
     }
-  }
+  };
 
   protected isEqualItem = (a: any, b: any) => {
       return a.category === b.category && a.description === b.description
