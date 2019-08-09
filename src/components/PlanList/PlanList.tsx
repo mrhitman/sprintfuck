@@ -4,27 +4,16 @@ import {Button, Col, Container, FormControl, InputGroup, ListGroup, Row} from 'r
 import {FaStar} from 'react-icons/fa';
 import uuid from 'uuid';
 import PlanListItem, {PlanItem} from './PlanListItem';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 
 interface PlanListState {
   items: PlanItem[];
 }
 
-export class PlanList extends Component<{}, PlanListState> {
+export class PlanList extends Component {
   protected categoryRef = createRef<any>();
   protected descriptionRef = createRef<any>();
-  public state = {
-    items: [
-      {
-        id: uuid(),
-        category: 'work',
-        description: 'do pomidoro',
-        order: 1,
-        is_favorite: false,
-        amount: 1,
-        created_at: DateTime.local()
-      }
-    ]
-  };
 
   public render() {
     return (
@@ -51,10 +40,10 @@ export class PlanList extends Component<{}, PlanListState> {
         </Row>
         <Row>
           <Col>
-            {this.state.items.length ? (
+            {this.props.plan.length ? (
               <ListGroup variant="flush">
-                {this.state
-                  .items
+                {this.props
+                  .plan
                   .sort((a, b) => b.order - a.order)
                   .map((item) => (
                     <PlanListItem
@@ -140,5 +129,10 @@ export class PlanList extends Component<{}, PlanListState> {
     }));
   };
 }
+const mapStateToProps = (state: any) => state;
+const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
-export default PlanList;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PlanList);
