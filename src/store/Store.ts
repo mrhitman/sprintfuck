@@ -1,13 +1,15 @@
-import { createStore, combineReducers } from "redux";
-import plan from "./plan/reducer";
-// import planMiddleware from "./plan/middleware";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 import { composeWithDevTools } from 'redux-devtools-extension';
+import planMiddleware from "./plan/middleware";
+import plan from "./plan/reducer";
+
 
 const store = createStore(
   combineReducers({
     plan
   }),
-  composeWithDevTools()
+  composeWithDevTools(
+    applyMiddleware(planMiddleware))
 );
 
 export default store;
