@@ -4,7 +4,7 @@ import { FaStar } from 'react-icons/fa';
 import PlanListItem, { PlanItem } from './PlanListItem';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { PLAN_ADD, PLAN_CLONE, PLAN_ITEM_INC, PLAN_ITEM_DEC, PLAN_REMOVE } from '../../store/plan/types';
+import { PLAN } from '../../store/plan/types';
 
 interface ItemValues {
   category: string;
@@ -84,13 +84,11 @@ class PlanList extends Component<{} & PlanListState> {
 
 const mapStateToProps = (state: any) => state;
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addItem: (values: ItemValues) => {
-    dispatch({ type: PLAN_ADD, payload: values });
-  },
-  deleteItem: (id: string) => dispatch({ type: PLAN_REMOVE, payload: id }),
-  cloneItem: (id: string) => dispatch({ type: PLAN_CLONE, payload: id }),
-  increment: (id: string) => dispatch({ type: PLAN_ITEM_INC, payload: id }),
-  decrement: (id: string) => dispatch({ type: PLAN_ITEM_DEC, payload: id })
+  addItem: (values: ItemValues) => dispatch({ type: PLAN.ADD, payload: values }),
+  deleteItem: (id: string) => dispatch({ type: PLAN.REMOVE, payload: id }),
+  cloneItem: (id: string) => dispatch({ type: PLAN.CLONE, payload: id }),
+  increment: (id: string) => dispatch({ type: PLAN.ITEM_INC, payload: id }),
+  decrement: (id: string) => dispatch({ type: PLAN.ITEM_DEC, payload: id })
 });
 
 export default connect<PlanListState>(mapStateToProps, mapDispatchToProps)(PlanList);
