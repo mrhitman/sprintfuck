@@ -21,11 +21,9 @@ const initialState = [
 ];
 
 
-export default (state: Array<PlanItem> = initialState, action: PlanAction) => {
-  switch (action.type) {
-    case PLAN.SET:
+export default (state: Array<PlanItem> = initialState, action: PlanAction): Array<PlanItem> => {
+    if (action.type === PLAN.SET) {
       return action.payload;
-    default:
-      return state;
-  }
+    }
+    return state;
 };
