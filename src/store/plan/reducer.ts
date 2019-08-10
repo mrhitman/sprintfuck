@@ -1,8 +1,8 @@
-import { Action } from "redux";
-import { PLAN } from "./types";
-import uuid from 'uuid';
 import { DateTime } from 'luxon';
+import { Action } from 'redux';
+import uuid from 'uuid';
 import { PlanItem } from '../../components/PlanList/PlanListItem';
+import { PLAN } from './types';
 
 export interface PlanAction extends Action {
   payload: any; // Array<PlanItem> | string | Partial<PlanItem>;
@@ -11,8 +11,8 @@ export interface PlanAction extends Action {
 const initialState = [
   {
     id: uuid(),
-    category: "work",
-    description: "do pomidoro",
+    category: 'work',
+    description: 'do pomidoro',
     order: 1,
     is_favorite: false,
     amount: 1,
@@ -20,10 +20,6 @@ const initialState = [
   }
 ];
 
-
 export default (state: Array<PlanItem> = initialState, action: PlanAction): Array<PlanItem> => {
-    if (action.type === PLAN.SET) {
-      return action.payload;
-    }
-    return state;
+  return action.type === PLAN.SET ? action.payload : state;
 };
