@@ -1,6 +1,8 @@
 import { DateTime } from 'luxon';
 import React, { Component } from 'react';
 import { Button, Container, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 import UIFx from 'uifx';
 import PlanList from '../PlanList/PlanList';
 import PomodoroSettings from './PomodoroSettings';
@@ -12,7 +14,9 @@ interface PomodoroState {
   minutes: number;
 }
 
-const beep = new UIFx({ asset: 'https://www.soundjay.com/button/beep-01a.mp3' });
+const beep = new UIFx({
+  asset: 'https://www.soundjay.com/button/beep-01a.mp3'
+});
 beep.setVolume(0.5);
 
 export class Pomodoro extends Component<{}, PomodoroState> {
@@ -36,10 +40,20 @@ export class Pomodoro extends Component<{}, PomodoroState> {
             </div>
           </Row>
           <Row>
-            <Button className="pomodoro-button" variant="outline-danger" onClick={this.handleStart}>
+            <Button
+              className="pomodoro-button"
+              variant="outline-danger"
+              disabled={!!this.state.timerId}
+              onClick={this.handleStart}
+            >
               Start
             </Button>
-            <Button className="pomodoro-button" variant="outline-danger" onClick={this.handleStop}>
+            <Button
+              className="pomodoro-button"
+              variant="outline-danger"
+              disabled={!this.state.timerId}
+              onClick={this.handleStop}
+            >
               Stop
             </Button>
           </Row>
@@ -81,10 +95,13 @@ export class Pomodoro extends Component<{}, PomodoroState> {
     if (+diff >= 0) {
       return this.handleStop();
     }
+
     this.setState({
       timeLeft: diff.negate().toFormat('mm : ss')
     });
   };
 }
+const mapStateToProps = (state: any) => state;
+const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
-export default Pomodoro;
+export default connect(mapStateToProps, mapDispatchToProps)(Pomodoro);

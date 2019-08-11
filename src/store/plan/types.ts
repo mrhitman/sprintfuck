@@ -1,0 +1,8 @@
+export enum PLAN {
+  SET = '@@PLAN/PLAN_SET',
+  ADD = '@@PLAN/ITEM_ADD',
+  CLONE = '@@PLAN/ITEM_CLONE',
+  REMOVE = '@@PLAN/ITEM_REMOVE',
+  ITEM_INC = '@@PLAN/ITEM_INC',
+  ITEM_DEC = '@@PLAN/ITEM_DEC',
+}

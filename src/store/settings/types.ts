@@ -1,0 +1,3 @@
+export enum SETTINGS {
+  SET = '@@SETTINGS/SETTINGS_SET',
+}

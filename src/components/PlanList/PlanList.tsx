@@ -1,30 +1,27 @@
-import {DateTime} from 'luxon';
-import React, {Component, createRef} from 'react';
-import {Button, Col, Container, FormControl, InputGroup, ListGroup, Row} from 'react-bootstrap';
-import {FaStar} from 'react-icons/fa';
-import uuid from 'uuid';
-import PlanListItem, {PlanItem} from './PlanListItem';
+import React, { Component, createRef } from 'react';
+import { Button, Col, Container, FormControl, InputGroup, ListGroup, Row } from 'react-bootstrap';
+import { FaStar } from 'react-icons/fa';
+import PlanListItem, { PlanItem } from './PlanListItem';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { PLAN } from '../../store/plan/types';
 
+interface ItemValues {
+  category: string;
+  description: string;
+}
 interface PlanListState {
-  items: PlanItem[];
+  plan: PlanItem[];
+  addItem: (values: ItemValues) => void;
+  deleteItem: (id: string) => void;
+  cloneItem: (id: string) => void;
+  increment: (id: string) => void;
+  decrement: (id: string) => void;
 }
 
-export class PlanList extends Component<{}, PlanListState> {
+class PlanList extends Component<{} & PlanListState> {
   protected categoryRef = createRef<any>();
   protected descriptionRef = createRef<any>();
-  public state = {
-    items: [
-      {
-        id: uuid(),
-        category: 'work',
-        description: 'do pomidoro',
-        order: 1,
-        is_favorite: false,
-        amount: 1,
-        created_at: DateTime.local()
-      }
-    ]
-  };
 
   public render() {
     return (
@@ -32,12 +29,12 @@ export class PlanList extends Component<{}, PlanListState> {
         <Row>
           <Col xs={3}>
             <InputGroup>
-              <FormControl ref={this.categoryRef}/>
+              <FormControl ref={this.categoryRef} />
             </InputGroup>
           </Col>
           <Col xs={8}>
             <InputGroup>
-              <FormControl ref={this.descriptionRef} onKeyPress={this.handleEnter}/>
+              <FormControl ref={this.descriptionRef} onKeyPress={this.handleEnter} />
               <InputGroup.Append>
                 <InputGroup.Text>+</InputGroup.Text>
               </InputGroup.Append>
@@ -45,25 +42,24 @@ export class PlanList extends Component<{}, PlanListState> {
           </Col>
           <Col xs={1}>
             <Button variant="outline-warning">
-              <FaStar size="13"/>
+              <FaStar size="13" />
             </Button>
           </Col>
         </Row>
         <Row>
           <Col>
-            {this.state.items.length ? (
+            {this.props.plan.length ? (
               <ListGroup variant="flush">
-                {this.state
-                  .items
+                {this.props.plan
                   .sort((a, b) => b.order - a.order)
                   .map((item) => (
                     <PlanListItem
                       key={item.id}
                       {...item}
-                      onDelete={this.handleDelete(item.id)}
-                      onIncrement={this.handleIncrement(item.id)}
-                      onDecrement={this.handleDecrement(item.id)}
-                      onClone={this.handleClone(item.id)}
+                      onDelete={this.props.deleteItem}
+                      onIncrement={this.props.increment}
+                      onDecrement={this.props.decrement}
+                      onClone={this.props.cloneItem}
                     />
                   ))}
               </ListGroup>
@@ -76,69 +72,23 @@ export class PlanList extends Component<{}, PlanListState> {
     );
   }
 
-  protected handleIncrement = (id: string) => () => {
-    this.setState(state => ({
-      items: state.items
-        .map(item => item.id === id ? {...item, amount: item.amount + 1} : item)
-    }));
-  };
-
-  protected handleDecrement = (id: string) => () => {
-    this.setState(state => ({
-      items: state.items
-        .map(item => item.id === id && item.amount > 1 ? {...item, amount: item.amount - 1} : item)
-    }));
-  };
-
-  protected handleClone = (id: string) => () => {
-
-  };
-
-  protected handleDelete = (id: string) => () => {
-    const removedItem = this.state.items.find(item => item.id === id)!;
-    this.setState(state => ({
-      items: state.items
-        .filter(item => item.id !== id)
-        .map(item => item.order > removedItem.order ? {...item, order: item.order - 1} : item)
-    }));
-  };
-
   protected handleEnter = (e: any) => {
     if (e.key === 'Enter') {
-      this.addItem({
+      this.props.addItem({
         category: this.categoryRef.current.value,
         description: this.descriptionRef.current.value
       });
     }
   };
-
-  protected isEqualItem = (a: any, b: any) => {
-    return a.category === b.category && a.description === b.description
-  };
-
-  protected addItem = (values: Partial<PlanItem>) => {
-    const items = this.state.items;
-    const lastItem = items.reduce((acc, item) => item.order > acc.order ? item : acc);
-    if (this.isEqualItem(values, lastItem)) {
-      const index = items.indexOf(lastItem);
-      items.splice(index, 1);
-      this.setState({items: [...items, {...lastItem, amount: lastItem.amount + 1}]});
-      return;
-    }
-    this.setState((state) => ({
-      items: [
-        ...state.items,
-        {
-          id: uuid(),
-          category: values.category!,
-          description: values.description!,
-          order: state.items.length + 1,
-          amount: 1,
-          created_at: DateTime.local()
-        }
-      ]
-    }));
-  };
 }
 
-export default PlanList;
+const mapStateToProps = (state: any) => state;
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addItem: (values: ItemValues) => dispatch({ type: PLAN.ADD, payload: values }),
+  deleteItem: (id: string) => dispatch({ type: PLAN.REMOVE, payload: id }),
+  cloneItem: (id: string) => dispatch({ type: PLAN.CLONE, payload: id }),
+  increment: (id: string) => dispatch({ type: PLAN.ITEM_INC, payload: id }),
+  decrement: (id: string) => dispatch({ type: PLAN.ITEM_DEC, payload: id })
+});
+
+export default connect<PlanListState>(mapStateToProps, mapDispatchToProps)(PlanList);
