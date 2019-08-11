@@ -6,12 +6,16 @@ import { Dispatch } from 'redux';
 import UIFx from 'uifx';
 import PlanList from '../PlanList/PlanList';
 import PomodoroSettings from './PomodoroSettings';
+import { SettingsState } from '../../store/settings/reducer';
 
 interface PomodoroState {
   end?: DateTime;
   timeLeft?: string;
   timerId?: NodeJS.Timeout;
-  minutes: number;
+}
+
+interface PomodoroStore {
+  settings: SettingsState;
 }
 
 const beep = new UIFx({
@@ -19,12 +23,11 @@ const beep = new UIFx({
 });
 beep.setVolume(0.5);
 
-export class Pomodoro extends Component<{}, PomodoroState> {
+class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
   public state = {
     end: undefined,
     timeLeft: undefined,
     timerId: undefined,
-    minutes: 10
   };
 
   public render() {
@@ -36,7 +39,7 @@ export class Pomodoro extends Component<{}, PomodoroState> {
           </Row>
           <Row>
             <div className="pomodoro-time">
-              <div>{this.state.timeLeft ? this.state.timeLeft : `${this.state.minutes} : 00`}</div>
+              <div>{this.state.timeLeft ? this.state.timeLeft : `${this.props.settings.pomodoro} : 00`}</div>
             </div>
           </Row>
           <Row>
@@ -66,7 +69,7 @@ export class Pomodoro extends Component<{}, PomodoroState> {
   protected handleStart = () => {
     this.setState((state) => {
       beep.play();
-      const end = DateTime.local().plus({ minutes: state.minutes });
+      const end = DateTime.local().plus({ minutes: this.props.settings.pomodoro });
       return {
         end,
         timerId: setInterval(this.handleTimeUpdate, 1000),
@@ -84,8 +87,7 @@ export class Pomodoro extends Component<{}, PomodoroState> {
       return {
         end: undefined,
         timerId: undefined,
-        timeLeft: undefined,
-        minutes: state.minutes
+        timeLeft: undefined
       };
     });
   };
@@ -104,4 +106,4 @@ export class Pomodoro extends Component<{}, PomodoroState> {
 const mapStateToProps = (state: any) => state;
 const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Pomodoro);
+export default connect<PomodoroStore>(mapStateToProps, mapDispatchToProps)(Pomodoro);

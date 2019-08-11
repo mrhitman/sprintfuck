@@ -6,7 +6,7 @@ import store from "../store/Store";
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <Pomodoro/>
+      <Pomodoro />
     </Provider>
   );
 };

@@ -15,9 +15,9 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  pomodoro: 25 * 60,
-  shortBreak: 5 * 60,
-  longBreak: 15 * 50,
+  pomodoro: 25,
+  shortBreak: 5,
+  longBreak: 15,
   longBreakInterval: 4,
   pomodoroAutoStart: false,
   breakAutoStart: true,

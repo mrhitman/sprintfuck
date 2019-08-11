@@ -10,6 +10,7 @@ interface ItemValues {
   category: string;
   description: string;
 }
+
 interface PlanListState {
   plan: PlanItem[];
   addItem: (values: ItemValues) => void;
@@ -18,6 +19,7 @@ interface PlanListState {
   increment: (id: string) => void;
   decrement: (id: string) => void;
 }
+
 
 class PlanList extends Component<{} & PlanListState> {
   protected categoryRef = createRef<any>();
