@@ -2,11 +2,12 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { PlanItem } from '../components/PlanList/PlanListItem';
 import planMiddleware from './plan/middleware';
-import plan from './plan/reducer';
-import settings from './settings/reducer';
-import timer from './timer/reducer';
+import plan, { PlanAction } from './plan/reducer';
+import settings, { SettingsState, SettingsAction } from './settings/reducer';
+import timer, { TimerAction } from './timer/reducer';
 
-const store = createStore(
+type Actions = PlanAction | TimerAction | SettingsAction;
+const store = createStore<Store, Actions, unknown, unknown>(
   combineReducers({
     plan,
     timer,
@@ -18,7 +19,7 @@ const store = createStore(
 export interface Store {
   plan: Array<PlanItem>;
   timer: any;
-  settings: any;
+  settings: SettingsState;
 }
 
 export default store;
