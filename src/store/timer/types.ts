@@ -1,5 +1,6 @@
 export enum TIMER {
-  SET = '@@TIMER/TIMER_SET',
+  SET = '@@TIMER/SET',
   START = '@@TIMER/START',
-  STOP = '@@TIMER/START'
+  STOP = '@@TIMER/START',
+  DONE = '@@TIMER/DONE'
 }

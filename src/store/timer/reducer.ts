@@ -2,12 +2,17 @@ import { Action } from "redux";
 import { PlanItem } from "../../components/PlanList/PlanListItem";
 import { TIMER } from "./types";
 
+export type TimerStateType = 'work' | 'idle' | 'break';
 export interface TimerState {
   currentItem: PlanItem | null
+  stepIndex: number;
+  state: TimerStateType;
 }
 
 const initialState: TimerState = {
-  currentItem: null
+  currentItem: null,
+  stepIndex: 0,
+  state: 'idle'
 };
 
 export interface TimerAction extends Action {

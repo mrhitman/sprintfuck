@@ -4,7 +4,7 @@ import { PlanItem } from '../components/PlanList/PlanListItem';
 import planMiddleware from './plan/middleware';
 import plan, { PlanAction } from './plan/reducer';
 import settings, { SettingsState, SettingsAction } from './settings/reducer';
-import timer, { TimerAction } from './timer/reducer';
+import timer, { TimerAction, TimerState } from './timer/reducer';
 
 type Actions = PlanAction | TimerAction | SettingsAction;
 const store = createStore<Store, Actions, unknown, unknown>(
@@ -18,7 +18,7 @@ const store = createStore<Store, Actions, unknown, unknown>(
 
 export interface Store {
   plan: Array<PlanItem>;
-  timer: any;
+  timer: TimerState;
   settings: SettingsState;
 }
 

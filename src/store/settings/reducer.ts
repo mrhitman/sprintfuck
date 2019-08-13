@@ -8,10 +8,11 @@ export interface SettingsState {
   longBreakInterval: number;
   pomodoroAutoStart: boolean;
   breakAutoStart: boolean;
-  notifyVolume: number;
+  volume: number;
   language: 'ru';
   timeFormat: '12:00' | '24:00';
   categories: Array<string>;
+  beep: string;
 }
 
 const initialState: SettingsState = {
@@ -21,10 +22,11 @@ const initialState: SettingsState = {
   longBreakInterval: 4,
   pomodoroAutoStart: false,
   breakAutoStart: true,
-  notifyVolume: 0.4,
+  volume: 0.4,
   language: 'ru',
   timeFormat: '24:00',
-  categories: [ 'work', 'other' ]
+  categories: [ 'work', 'other' ],
+  beep: 'https://www.soundjay.com/button/beep-01a.mp3'
 };
 
 export interface SettingsAction extends Action {
