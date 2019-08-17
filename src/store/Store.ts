@@ -3,7 +3,8 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { PlanItem } from '../components/PlanList/PlanListItem';
 import planMiddleware from './plan/middleware';
 import plan, { PlanAction } from './plan/reducer';
-import settings, { SettingsState, SettingsAction } from './settings/reducer';
+import settings, { SettingsAction, SettingsState } from './settings/reducer';
+import timerMiddleware from './timer/middleware';
 import timer, { TimerAction, TimerState } from './timer/reducer';
 
 type Actions = PlanAction | TimerAction | SettingsAction;
@@ -13,7 +14,9 @@ const store = createStore<Store, Actions, unknown, unknown>(
     timer,
     settings
   }),
-  composeWithDevTools(applyMiddleware(planMiddleware))
+  composeWithDevTools(
+    applyMiddleware(planMiddleware, timerMiddleware)
+  )
 );
 
 export interface Store {

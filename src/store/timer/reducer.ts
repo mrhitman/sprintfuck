@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import { Action } from "redux";
 import { PlanItem } from "../../components/PlanList/PlanListItem";
 import { TIMER } from "./types";
@@ -7,12 +8,18 @@ export interface TimerState {
   currentItem: PlanItem | null
   stepIndex: number;
   state: TimerStateType;
+  endTime?: DateTime;
+  timerId?: NodeJS.Timeout;
+  onTimer?: () => void;
 }
 
 const initialState: TimerState = {
   currentItem: null,
   stepIndex: 0,
-  state: 'idle'
+  state: 'idle',
+  endTime: undefined,
+  timerId: undefined,
+  onTimer: undefined
 };
 
 export interface TimerAction extends Action {
