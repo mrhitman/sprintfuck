@@ -9,17 +9,13 @@ export interface TimerState {
   stepIndex: number;
   state: TimerStateType;
   endTime?: DateTime;
-  timerId?: NodeJS.Timeout;
-  onTimer?: () => void;
 }
 
 const initialState: TimerState = {
   currentItem: null,
   stepIndex: 0,
   state: 'idle',
-  endTime: undefined,
-  timerId: undefined,
-  onTimer: undefined
+  endTime: undefined
 };
 
 export interface TimerAction extends Action {

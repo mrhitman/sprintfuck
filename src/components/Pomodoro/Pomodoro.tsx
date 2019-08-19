@@ -11,13 +11,14 @@ import { TIMER } from '../../store/timer/types';
 import { TimerState } from '../../store/timer/reducer';
 
 interface PomodoroState {
+  timerId?: NodeJS.Timeout;
   timeLeft?: string;
 }
 
 interface PomodoroStore {
   timer: TimerState;
   settings: SettingsState;
-  start: (onTimer: () => void) => void;
+  start: () => void;
   stop: () => void;
 }
 
@@ -27,10 +28,6 @@ const beep = new UIFx({
 beep.setVolume(0.5);
 
 class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
-  public state = {
-    timeLeft: undefined,
-  };
-
   public render() {
     return (
       <React.Fragment>
@@ -40,14 +37,14 @@ class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
           </Row>
           <Row>
             <div className="pomodoro-time">
-              <div>{this.state.timeLeft ? this.state.timeLeft : `${this.props.settings.pomodoro} : 00`}</div>
+              <div>{this.props.timer.state !== 'idle' && this.state.timeLeft ? this.state.timeLeft : `${this.props.settings.pomodoro} : 00`}</div>
             </div>
           </Row>
           <Row>
             <Button
               className="pomodoro-button"
               variant="outline-danger"
-              disabled={!!this.props.timer.timerId}
+              disabled={this.props.timer.state !== 'idle'}
               onClick={this.handleStart}
             >
               Start
@@ -55,7 +52,7 @@ class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
             <Button
               className="pomodoro-button"
               variant="outline-danger"
-              disabled={!this.props.timer.timerId}
+              disabled={this.props.timer.state === 'idle'}
               onClick={this.handleStop}
             >
               Stop
@@ -69,16 +66,23 @@ class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
 
   protected handleStart = () => {
     beep.play();
-    this.props.start(this.handleTimeUpdate);
+    this.props.start();
+
+    const timerId = setInterval(this.handleTimeUpdate, 200);
+    this.setState({ timerId });
   };
 
   protected handleStop = () => {
     beep.play();
+    clearTimeout(this.state.timerId!);
+    this.setState({
+      timeLeft: undefined,
+      timerId: undefined
+    })
     this.props.stop();
   };
 
   protected handleTimeUpdate = () => {
-
     const diff = DateTime
       .local()
       .diff(this.props.timer.endTime!);
@@ -95,8 +99,8 @@ class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
 
 const mapStateToProps = (state: any) => state;
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  start: (onTimer: () => void) => {
-    dispatch({ type: TIMER.START, payload: { onTimer } })
+  start: () => {
+    dispatch({ type: TIMER.START })
   },
   stop: () => {
     dispatch({ type: TIMER.STOP })
