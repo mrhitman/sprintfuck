@@ -2,6 +2,7 @@ import { Dispatch, MiddlewareAPI } from 'redux';
 import { Store } from '../Store';
 import { TimerAction, TimerStateType } from './reducer';
 import { TIMER } from './types';
+import { DateTime } from 'luxon';
 
 export function done(store: MiddlewareAPI<Dispatch, Store>, action: TimerAction) {
   const state = store.getState();
@@ -23,12 +24,10 @@ export function done(store: MiddlewareAPI<Dispatch, Store>, action: TimerAction)
   store.dispatch({
     type: TIMER.SET,
     payload: {
-      ...state,
-      timer: {
-        ...timer,
-        stepIndex: timer.stepIndex + 1,
-        state: newTimerState
-      }
+      ...timer,
+      stepIndex: timer.stepIndex + 1,
+      endTime: newTimerState === 'idle' ? undefined : DateTime.local().plus({ minutes: state.settings.pomodoro }),
+      state: newTimerState
     }
   });
 }

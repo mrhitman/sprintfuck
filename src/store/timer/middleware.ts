@@ -5,11 +5,8 @@ import { TIMER } from './types';
 import { done } from './actions';
 import { DateTime } from 'luxon';
 
-const middleware: Middleware = (store: MiddlewareAPI<Dispatch, Store>) => (next: Dispatch) => (
-  action: TimerAction
-) => {
+const middleware: Middleware = (store: MiddlewareAPI<Dispatch, Store>) => (next: Dispatch) => (action: TimerAction) => {
   const state = store.getState();
-  console.log(action.type);
   switch (action.type) {
     case TIMER.START:
       const end = DateTime.local().plus({ minutes: state.settings.pomodoro });
@@ -18,7 +15,7 @@ const middleware: Middleware = (store: MiddlewareAPI<Dispatch, Store>) => (next:
         payload: {
           ...state.timer,
           endTime: end,
-          state: 'work',
+          state: 'work'
         }
       });
     case TIMER.STOP:

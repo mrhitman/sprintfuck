@@ -15,7 +15,7 @@ export interface SettingsState {
   beep: string;
 }
 
-const initialState: SettingsState = {
+export const initialState: SettingsState = {
   pomodoro: 25,
   shortBreak: 5,
   longBreak: 15,

@@ -8,7 +8,7 @@ export interface PlanAction extends Action {
   payload: any; // Array<PlanItem> | string | Partial<PlanItem>;
 }
 
-const initialState = [
+export const initialState = [
   {
     id: uuid(),
     category: 'work',

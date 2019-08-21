@@ -87,8 +87,12 @@ export class PomodoroSettings extends Component<{} & PomodoroSettingsStore, Pomo
                     <Col>Pomodoro autostart</Col>
                     <Col>
                       <label className="switch">
-                        <input type="checkbox" checked={bag.values.pomodoroAutoStart} onChange={bag.handleChange('pomodoroAutoStart')} />
-                        <span className="slider round"  />
+                        <input
+                          type="checkbox"
+                          checked={bag.values.pomodoroAutoStart}
+                          onChange={bag.handleChange('pomodoroAutoStart')}
+                        />
+                        <span className="slider round" />
                       </label>
                     </Col>
                   </Row>
@@ -96,8 +100,12 @@ export class PomodoroSettings extends Component<{} & PomodoroSettingsStore, Pomo
                     <Col>Break autostart</Col>
                     <Col>
                       <label className="switch">
-                        <input type="checkbox" checked={bag.values.breakAutoStart} onChange={bag.handleChange('breakAutoStart')} />
-                        <span className="slider round"  />
+                        <input
+                          type="checkbox"
+                          checked={bag.values.breakAutoStart}
+                          onChange={bag.handleChange('breakAutoStart')}
+                        />
+                        <span className="slider round" />
                       </label>
                     </Col>
                   </Row>

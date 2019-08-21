@@ -8,7 +8,7 @@ import PlanList from '../PlanList/PlanList';
 import PomodoroSettings from './PomodoroSettings';
 import { SettingsState } from '../../store/settings/reducer';
 import { TIMER } from '../../store/timer/types';
-import { TimerState } from '../../store/timer/reducer';
+import { TimerState, TimerStateType } from '../../store/timer/reducer';
 
 interface PomodoroState {
   timerId?: NodeJS.Timeout;
@@ -20,6 +20,7 @@ interface PomodoroStore {
   settings: SettingsState;
   start: () => void;
   stop: () => void;
+  done: () => void;
 }
 
 const beep = new UIFx({
@@ -37,7 +38,13 @@ class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
           </Row>
           <Row>
             <div className="pomodoro-time">
-              <div>{this.props.timer.state !== 'idle' && this.state.timeLeft ? this.state.timeLeft : `${this.props.settings.pomodoro} : 00`}</div>
+              <div>
+                {this.props.timer.state !== 'idle' && this.state.timeLeft ? (
+                  this.state.timeLeft
+                ) : (
+                  `${this.props.settings.pomodoro} : 00`
+                )}
+              </div>
             </div>
           </Row>
           <Row>
@@ -78,17 +85,23 @@ class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
     this.setState({
       timeLeft: undefined,
       timerId: undefined
-    })
+    });
     this.props.stop();
   };
 
   protected handleTimeUpdate = () => {
+    if (!this.props.timer.endTime) {
+      return;
+    }
+
     const diff = DateTime
       .local()
-      .diff(this.props.timer.endTime!);
+      .diff(this.props.timer.endTime);
 
     if (+diff >= 0) {
-      return this.handleStop();
+      beep.play();
+      this.props.done();
+      return;
     }
 
     this.setState({
@@ -99,11 +112,14 @@ class Pomodoro extends Component<{} & PomodoroStore, PomodoroState> {
 
 const mapStateToProps = (state: any) => state;
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  start: () => {
-    dispatch({ type: TIMER.START })
+  start: (type: TimerStateType) => {
+    dispatch({ type: TIMER.START });
   },
   stop: () => {
-    dispatch({ type: TIMER.STOP })
+    dispatch({ type: TIMER.STOP });
+  },
+  done: () => {
+    dispatch({ type: TIMER.DONE });
   },
 });
 

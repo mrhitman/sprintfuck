@@ -11,7 +11,7 @@ export interface TimerState {
   endTime?: DateTime;
 }
 
-const initialState: TimerState = {
+export const initialState: TimerState = {
   currentItem: null,
   stepIndex: 0,
   state: 'idle',
