@@ -9,6 +9,7 @@ export function done(store: MiddlewareAPI<Dispatch, Store>, action: TimerAction)
 
   const { timer, settings } = state;
   let newTimerState: TimerStateType;
+  let length: number = 0;
 
   switch (timer.state) {
     case 'work':
@@ -21,12 +22,17 @@ export function done(store: MiddlewareAPI<Dispatch, Store>, action: TimerAction)
       newTimerState = timer.state;
   }
 
+  length = newTimerState === 'work' ? settings.pomodoro : length;
+  if (newTimerState === 'break') {
+    length = timer.stepIndex >= settings.longBreakInterval ? settings.longBreak : settings.shortBreak;
+  }
+
   store.dispatch({
     type: TIMER.SET,
     payload: {
       ...timer,
-      stepIndex: timer.stepIndex + 1,
-      endTime: newTimerState === 'idle' ? undefined : DateTime.local().plus({ minutes: state.settings.pomodoro }),
+      stepIndex: timer.stepIndex >= settings.longBreakInterval ? 0 : timer.stepIndex + 1,
+      endTime: newTimerState === 'idle' ? undefined : DateTime.local().plus({ minutes: length }),
       state: newTimerState
     }
   });
